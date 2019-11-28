@@ -25,6 +25,7 @@ nginx_extra_packages:
   # For GeoIP blocking feature
   - geoip-database
   - libgeoip1
+nginx_clone_environment: {}
 
 # Daemon
 nginx_config_file: nginx.conf.j2

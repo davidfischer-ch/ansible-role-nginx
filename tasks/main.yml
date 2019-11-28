@@ -51,6 +51,7 @@
         dest: '{{ local_source_directory }}/nginx'
         force: yes
         version: '{{ nginx_version }}'
+      environment: '{{ nginx_clone_environment }}'
       register: _nginx_git
 
     - name: Clone Length Hiding Filter module source code
@@ -59,6 +60,7 @@
         dest: '{{ local_source_directory }}/nginx-length-hiding-filter-module'
         force: yes
         version: '{{ nginx_length_hiding_filter_module_version }}'
+      environment: '{{ nginx_clone_environment }}'
       register: _nginx_length_hiding_filter_module_git
       when: nginx_length_hiding_filter_module_enabled|bool
 
@@ -69,6 +71,7 @@
             dest: '{{ local_source_directory }}/nginx-upload-module'
             force: yes
             version: '{{ nginx_upload_module_version }}'
+          environment: '{{ nginx_clone_environment }}'
           register: _nginx_upload_module_git
 
         - name: Clone Upload Progress module source code
@@ -77,6 +80,7 @@
             dest: '{{ local_source_directory }}/nginx-upload-progress-module'
             force: yes
             version: '{{ nginx_upload_progress_module_version }}'
+          environment: '{{ nginx_clone_environment }}'
           register: _nginx_upload_progress_module_git
       when: nginx_upload_module_enabled|bool
 
@@ -86,6 +90,7 @@
         dest: '{{ local_source_directory }}/nginx-zip-module'
         force: yes
         version: '{{ nginx_zip_module_version }}'
+      environment: '{{ nginx_clone_environment }}'
       register: _nginx_zip_module_git
       when: nginx_zip_module_enabled|bool
 
