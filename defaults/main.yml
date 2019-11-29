@@ -1,3 +1,31 @@
+nginx_dynamic_defaults:
+
+  linux:
+    nginx_build_packages:
+      # https://developers.google.com/speed/pagespeed/module/build_ngx_pagespeed_from_source
+      - libpcre3
+      - libpcre3-dev
+      - unzip
+      - zlib1g
+      - zlib1g-dev
+    nginx_extra_packages:
+      # For GeoIP blocking feature
+      - geoip-database
+      - libgeoip1
+
+  yum:
+    nginx_build_packages:
+      # https://developers.google.com/speed/pagespeed/module/build_ngx_pagespeed_from_source
+      - pcre
+      - pcre-devel
+      - unzip
+      - zlib
+      - zlib-devel
+    nginx_extra_packages:
+      # For GeoIP blocking feature
+      - GeoIP-data
+      - GeoIP
+
 # Source code
 nginx_build_flags:
   - '--with-pcre-jit'
@@ -14,17 +42,6 @@ nginx_build_flags:
   - '--with-http_sub_module'
   - '--with-http_xslt_module'
   - '--with-http_auth_request_module'
-nginx_build_packages:
-  # https://developers.google.com/speed/pagespeed/module/build_ngx_pagespeed_from_source
-  - libpcre3
-  - libpcre3-dev
-  - unzip
-  - zlib1g
-  - zlib1g-dev
-nginx_extra_packages:
-  # For GeoIP blocking feature
-  - geoip-database
-  - libgeoip1
 nginx_clone_environment: {}
 
 # Daemon
