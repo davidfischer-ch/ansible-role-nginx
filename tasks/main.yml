@@ -23,23 +23,6 @@
   become: yes
   tags: [nginx, packages]
 
-- block:
-    - name: Create Nginx daemon group
-      group:
-        name: '{{ nginx_daemon_group }}'
-        state: present
-        system: yes
-
-    - name: Create Nginx daemon user
-      user:
-        name: '{{ nginx_daemon_user }}'
-        createhome: no
-        group: '{{ nginx_daemon_group }}'
-        state: present
-        system: yes
-  become: yes
-  tags: [nginx, config]
-
 - include_tasks: pagespeed.yml
   tags: [nginx, packages]
   when: nginx_pagespeed_module_enabled|bool

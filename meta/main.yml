@@ -4,6 +4,13 @@ dependencies:
   - role: build
     tags: [nginx, dependencies]
 
+  - role: daemon
+    daemon_user: '{{ nginx_daemon_user }}'
+    daemon_group: '{{ nginx_daemon_group }}'
+    daemon_user_id: '{{ nginx_daemon_user_id }}'
+    daemon_group_id: '{{ nginx_daemon_group_id }}'
+    tags: [nginx, dependencies]
+
   - role: github
     tags: [nginx, dependencies]
 

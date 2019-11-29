@@ -30,8 +30,10 @@ nginx_clone_environment: {}
 # Daemon
 nginx_config_file: nginx.conf.j2
 nginx_daemon_group: www-data
+nginx_daemon_group_id: '{{ omit }}'
 nginx_daemon_path: /usr/share/nginx/sbin/nginx
 nginx_daemon_user: www-data
+nginx_daemon_user_id: '{{ omit }}'
 nginx_reload_on_update: no
 nginx_security_config_file: security.conf.j2
 
