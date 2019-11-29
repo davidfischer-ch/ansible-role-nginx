@@ -1,0 +1,8 @@
+---
+
+- name: Install Nginx build dependencies
+  apt:
+    name: nginx
+    state: build-dep
+  become: yes
+  tags: [nginx, packages] # FIXME Remove when this is fixed https://github.com/ansible/ansible/issues/30882

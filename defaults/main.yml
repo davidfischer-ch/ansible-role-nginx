@@ -1,6 +1,6 @@
 nginx_dynamic_defaults:
 
-  linux:
+  apt:
     nginx_build_packages:
       # https://developers.google.com/speed/pagespeed/module/build_ngx_pagespeed_from_source
       - libpcre3
@@ -42,6 +42,7 @@ nginx_build_flags:
   - '--with-http_sub_module'
   - '--with-http_xslt_module'
   - '--with-http_auth_request_module'
+
 nginx_clone_environment: {}
 
 # Daemon

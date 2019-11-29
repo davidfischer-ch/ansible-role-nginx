@@ -5,11 +5,7 @@
 - import_tasks: facts.yml
 
 - block:
-    - name: Install Nginx build dependencies
-      apt:
-        name: nginx
-        state: build-dep
-      when: "ansible_pkg_mgr == 'apt'"
+    - include_tasks: setup-build-dep-{{ ansible_pkg_mgr }}.yml
 
     - name: Install Nginx build packages
       package:
