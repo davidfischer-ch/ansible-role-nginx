@@ -269,7 +269,7 @@
         dest: /etc/nginx/sites-ssl/{{ item.0.name }}.{{ item.1 }}
         owner: '{{ nginx_daemon_user }}'
         group: '{{ nginx_daemon_group }}'
-        mode: 0444
+        mode: 0440
       loop: "{{ lookup('nested', nginx_sites.values(), ['crt', 'key']) }}"
       loop_control:
         label: '{{ item.0.name }} {{ item.1 }}'
