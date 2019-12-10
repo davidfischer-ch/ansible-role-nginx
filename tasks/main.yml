@@ -192,8 +192,8 @@
         dest: /etc/nginx/{{ item.dest }}
         mode: 0644
       loop:
-        - { src: '{{ nginx_config_file }}',          dest: 'nginx.conf'           }
-        - { src: '{{ nginx_security_config_file }}', dest: 'conf.d/security.conf' }
+        - { src: '{{ nginx_config_file }}',          dest: nginx.conf           }
+        - { src: '{{ nginx_security_config_file }}', dest: conf.d/security.conf }
       notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
 
     - name: Remove default site
@@ -221,7 +221,7 @@
       when: _nginx_start is failure
   become: yes
   tags: [nginx, services]
-  when: "nginx_daemon_mode == 'supervisor'"
+  when: nginx_daemon_mode == 'supervisor'
 
 - name: Start Nginx service
   service:
@@ -230,7 +230,7 @@
     state: started
   become: yes
   tags: [nginx, services]
-  when: "nginx_daemon_mode != 'supervisor'"
+  when: nginx_daemon_mode != 'supervisor'
 
 - name: Trigger Nginx reload
   command:
