@@ -16,6 +16,14 @@
       package:
         name: '{{ nginx_extra_packages }}'
         state: present
+
+    - name: Install Nginx Python packages
+      pip:
+        name: cryptography
+        executable: '{{ nginx_pip_path }}'
+        state: present
+        umask: '{{ nginx_pip_umask }}'
+      environment: '{{ nginx_pip_environment }}'
   become: yes
   tags: [nginx, packages]
 
@@ -261,6 +269,60 @@
         label: '{{ item.value.name }}'
       notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
       when: item.value.auth_file|default('')|length > 0
+      with_dict: '{{ nginx_sites }}'
+
+    - name: Generate the Nginx self signed certificates (private key)
+      openssl_privatekey:
+        path: /etc/nginx/sites-ssl/{{ item.value.name }}.key
+        state: present
+        owner: '{{ nginx_daemon_user }}'
+        group: '{{ nginx_daemon_group }}'
+        mode: 0440
+      loop_control:
+        label: '{{ item.value.name }}'
+      notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
+      when: item.value.ssl_auto_signed is defined
+      with_dict: '{{ nginx_sites }}'
+
+    - name: Generate the Nginx self signed certificates (request)
+      openssl_csr:
+        path: /etc/nginx/sites-ssl/{{ item.value.name }}.csr
+        privatekey_path: /etc/nginx/sites-ssl/{{ item.value.name }}.key
+        common_name: '{{ item.value.ssl_auto_signed.common_name|default(item.value.domains[0]) }}'
+        country_name: '{{ item.value.ssl_auto_signed.country_name|default(omit) }}'
+        email_address: '{{ item.value.ssl_auto_signed.email_address|default(omit) }}'
+        extended_key_usage: '{{ item.value.ssl_auto_signed.extended_key_usage|default(omit) }}'
+        key_usage: '{{ item.value.ssl_auto_signed.key_usage|default(omit) }}'
+        locality_name: '{{ item.value.ssl_auto_signed.locality_name|default(omit) }}'
+        organization_name: '{{ item.value.ssl_auto_signed.organization_name|default(omit) }}'
+        organizational_unit_name: '{{ item.value.ssl_auto_signed.organizational_unit_name|default(omit) }}'
+        state_or_province_name: '{{ item.value.ssl_auto_signed.state_or_province_name|default(omit) }}'
+        subject: '{{ item.value.ssl_auto_signed.subject|default(omit) }}'
+        subject_alt_name: '{{ item.value.ssl_auto_signed.subject_alt_name|default(omit) }}'
+        state: present
+        owner: '{{ nginx_daemon_user }}'
+        group: '{{ nginx_daemon_group }}'
+        mode: 0440
+      loop_control:
+        label: '{{ item.value.name }}'
+      notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
+      when: item.value.ssl_auto_signed is defined
+      with_dict: '{{ nginx_sites }}'
+
+    - name: Generate the Nginx self signed certificates (certificate)
+      openssl_certificate:
+        path: /etc/nginx/sites-ssl/{{ item.value.name }}.crt
+        csr_path: /etc/nginx/sites-ssl/{{ item.value.name }}.csr
+        privatekey_path: /etc/nginx/sites-ssl/{{ item.value.name }}.key
+        provider: selfsigned
+        state: present
+        owner: '{{ nginx_daemon_user }}'
+        group: '{{ nginx_daemon_group }}'
+        mode: 0440
+      loop_control:
+        label: '{{ item.value.name }}'
+      notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
+      when: item.value.ssl_auto_signed is defined
       with_dict: '{{ nginx_sites }}'
 
     - name: Setup the Nginx sites certificates

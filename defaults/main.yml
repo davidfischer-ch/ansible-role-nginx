@@ -26,6 +26,10 @@ nginx_dynamic_defaults:
       - GeoIP-data
       - GeoIP
 
+nginx_pip_path: '{{ python_pip_path }}'
+nginx_pip_umask: '{{ python_pip_umask }}'
+nginx_pip_environment: '{{ python_pip_environment }}'
+
 # Source code
 nginx_build_flags:
   - '--with-pcre-jit'
