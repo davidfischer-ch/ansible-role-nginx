@@ -17,13 +17,13 @@
         name: '{{ nginx_extra_packages }}'
         state: present
 
-    - name: Install Nginx Python packages
+    - name: Install Nginx Python packages for Ansible
       pip:
         name: cryptography
         executable: '{{ nginx_pip_path }}'
-        state: present
+        state: "{{ (nginx_cryptography_version == 'latest')|ternary('latest', omit) }}"
         umask: '{{ nginx_pip_umask }}'
-      environment: '{{ nginx_pip_environment }}'
+        version: "{{ (nginx_cryptography_version == 'latest')|ternary(omit, nginx_cryptography_version) }}"
   become: yes
   tags: [nginx, packages]
 

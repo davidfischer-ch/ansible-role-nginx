@@ -26,9 +26,11 @@ nginx_dynamic_defaults:
       - GeoIP-data
       - GeoIP
 
-nginx_pip_path: '{{ python_pip_path }}'
-nginx_pip_umask: '{{ python_pip_umask }}'
-nginx_pip_environment: '{{ python_pip_environment }}'
+nginx_pip_path: '{{ omit }}'  # Using Ansible python interpreter
+nginx_pip_umask: "{{ python_pip_umask|default('022') }}"
+nginx_pip_environment: '{{ python_pip_environment|default({}) }}'
+nginx_cryptography_version: latest
+
 
 # Source code
 nginx_build_flags:
