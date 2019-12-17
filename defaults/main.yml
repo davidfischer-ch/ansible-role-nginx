@@ -31,7 +31,6 @@ nginx_pip_umask: "{{ python_pip_umask|default('022') }}"
 nginx_pip_environment: '{{ python_pip_environment|default({}) }}'
 nginx_cryptography_version: latest
 
-
 # Source code
 nginx_build_flags:
   - '--with-pcre-jit'
