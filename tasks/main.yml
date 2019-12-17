@@ -24,6 +24,7 @@
         state: "{{ (nginx_cryptography_version == 'latest')|ternary('latest', omit) }}"
         umask: '{{ nginx_pip_umask }}'
         version: "{{ (nginx_cryptography_version == 'latest')|ternary(omit, nginx_cryptography_version) }}"
+      environment: '{{ nginx_pip_environment }}'
   become: yes
   tags: [nginx, packages]
 
