@@ -5,6 +5,11 @@
 - import_tasks: facts.yml
 
 - block:
+    - name: Install Nginx clone packages
+      package:
+        name: '{{ nginx_clone_packages }}'
+        state: present
+
     - name: Install Nginx extra packages
       package:
         name: '{{ nginx_extra_packages }}'
