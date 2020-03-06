@@ -1,4 +1,5 @@
 nginx_daemon_modes:
+  container: container
   supervisor: supervisor
   systemd: system
   systemv: system

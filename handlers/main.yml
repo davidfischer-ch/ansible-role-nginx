@@ -5,6 +5,18 @@
     systemctl daemon-reload
   become: '{{ do_become }}'
 
+- name: container restart nginx
+  command:
+    ls /dev/null
+  changed_when: no
+  check_mode: no
+
+- name: container reload nginx
+  command:
+    ls /dev/null
+  changed_when: no
+  check_mode: no
+
 - name: supervisor restart nginx
   supervisorctl:
     name: nginx

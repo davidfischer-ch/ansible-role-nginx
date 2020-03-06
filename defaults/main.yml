@@ -64,6 +64,7 @@ nginx_clone_packages:
 
 # Daemon
 nginx_config_file: nginx.conf.j2
+nginx_daemon_enabled: "{{ nginx_daemon_modes[nginx_daemon_mode] == 'service' }}"
 nginx_daemon_group: www-data
 nginx_daemon_group_id: '{{ omit }}'
 nginx_daemon_path: /usr/share/nginx/sbin/nginx

@@ -1,4 +1,4 @@
-daemon {{ (nginx_daemon_mode == 'supervisor')|ternary('off', 'on') }};
+daemon {{ nginx_daemon_enabled|bool|ternary('on', 'off') }};
 user {{ nginx_daemon_user }} {{ nginx_daemon_group }};
 worker_processes {{ nginx_worker_processes|int }};
 pid /run/nginx.pid;
