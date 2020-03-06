@@ -3,6 +3,7 @@ nginx_dynamic_defaults:
   apt:
     nginx_build_packages:
       # https://developers.google.com/speed/pagespeed/module/build_ngx_pagespeed_from_source
+      - git
       - libpcre3
       - libpcre3-dev
       - unzip
@@ -16,6 +17,7 @@ nginx_dynamic_defaults:
   yum:
     nginx_build_packages:
       # https://developers.google.com/speed/pagespeed/module/build_ngx_pagespeed_from_source
+      - git
       - pcre
       - pcre-devel
       - unzip
