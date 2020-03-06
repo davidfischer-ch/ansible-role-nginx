@@ -3,29 +3,29 @@
 - name: reload systemd
   command:
     systemctl daemon-reload
-  become: yes
+  become: '{{ do_become }}'
 
 - name: supervisor restart nginx
   supervisorctl:
     name: nginx
     state: restarted
-  become: yes
+  become: '{{ do_become }}'
 
 - name: supervisor reload nginx
   command:
     supervisorctl signal HUP nginx
-  become: yes
+  become: '{{ do_become }}'
 
 - name: system restart nginx
   service:
     name: nginx
     state: restarted
     use: '{{ nginx_daemon_mode }}'
-  become: yes
+  become: '{{ do_become }}'
 
 - name: system reload nginx
   service:
     name: nginx
     state: reloaded
     use: '{{ nginx_daemon_mode }}'
-  become: yes
+  become: '{{ do_become }}'

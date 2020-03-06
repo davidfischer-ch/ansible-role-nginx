@@ -3,7 +3,7 @@
 - name: Install Nginx build dependencies
   command:
     yum-builddep --assume{{ 'no' if ansible_check_mode else 'yes' }} nginx
-  become: yes
+  become: '{{ do_become }}'
   changed_when: "'No uninstalled build requires' not in _nginx_build_dep.stdout|default('')"
   check_mode: no
   failed_when: _nginx_build_dep is failure and 'Exiting on user command' not in _nginx_build_dep.stdout

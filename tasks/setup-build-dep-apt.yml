@@ -4,5 +4,5 @@
   apt:
     name: nginx
     state: build-dep
-  become: yes
+  become: '{{ do_become }}'
   tags: [nginx, packages] # FIXME Remove when this is fixed https://github.com/ansible/ansible/issues/30882

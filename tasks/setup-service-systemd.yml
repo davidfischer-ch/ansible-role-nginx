@@ -5,7 +5,7 @@
     src: nginx.service.j2
     dest: /etc/systemd/system/nginx.service
     mode: 0755
-  become: yes
+  become: '{{ do_become }}'
   notify:
     - reload systemd
     - '{{ nginx_daemon_modes[nginx_daemon_mode] }} restart nginx'

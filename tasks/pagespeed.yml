@@ -43,5 +43,5 @@
         dest: '{{ local_source_directory }}/{{ item.path }}'
         copy: no
       loop: '{{ nginx_pagespeed_module_items|default([]) }}'
-  become: yes
+  become: '{{ do_become }}'
   tags: [nginx, packages] # FIXME Remove when this is fixed https://github.com/ansible/ansible/issues/30882
