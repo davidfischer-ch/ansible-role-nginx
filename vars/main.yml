@@ -2,3 +2,8 @@ nginx_daemon_modes:
   supervisor: supervisor
   systemd: system
   systemv: system
+
+nginx_role_actions:
+  - cleanup
+  - restart
+  - setup

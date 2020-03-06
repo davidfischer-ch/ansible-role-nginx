@@ -9,6 +9,7 @@
     - assert:
         that:
           - nginx_daemon_mode in nginx_daemon_modes
+          - nginx_role_action in nginx_role_actions
           - nginx_sites is defined
           - nginx_version is defined
   tags: [nginx, always]

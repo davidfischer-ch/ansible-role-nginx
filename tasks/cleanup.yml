@@ -1,0 +1,18 @@
+# Cleanup packages once Nginx is installed
+# https://blog.engineyard.com/2011/useful-rewrites-for-nginx
+---
+
+- block:
+    - name: Cleanup Nginx packages
+      package:
+        name: '{{ nginx_cleanup_packages }}'
+        state: absent
+
+    - name: Cleanup Nginx Python packages
+      pip:
+        name: cryptography
+        executable: '{{ nginx_pip_path }}'
+        state: absent
+      environment: '{{ nginx_pip_environment }}'
+  become: '{{ do_become }}'
+  tags: packages
