@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.1
+
+## Fix and enhancements
+
+- Cleanup local source directory
+
 ## v1.1.0
 
 ### Minor compatibility breaks
