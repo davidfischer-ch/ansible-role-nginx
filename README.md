@@ -27,6 +27,8 @@ Example for delivering some static content (e.g. a React Front-End Application a
   roles:
     - nginx
   vars:
+    nginx_role_action: setup
+
     # nginx_length_hiding_filter_module_enabled: yes
     # nginx_length_hiding_filter_module_version: 1.1.1  # 15/08/2018
 

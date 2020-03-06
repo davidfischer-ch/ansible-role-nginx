@@ -14,5 +14,10 @@
         executable: '{{ nginx_pip_path }}'
         state: absent
       environment: '{{ nginx_pip_environment }}'
+
+    - name: Cleanup source directory
+      file:
+        path: '{{ local_source_directory }}'
+        state: absent
   become: '{{ do_become }}'
   tags: packages
