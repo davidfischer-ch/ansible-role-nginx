@@ -5,13 +5,6 @@
 - import_tasks: facts.yml
 
 - block:
-    - include_tasks: setup-build-dep-{{ ansible_pkg_mgr }}.yml
-
-    - name: Install Nginx build packages
-      package:
-        name: '{{ nginx_build_packages }}'
-        state: present
-
     - name: Install Nginx extra packages
       package:
         name: '{{ nginx_extra_packages }}'
@@ -130,6 +123,13 @@
       register: nginx_build
 
     - block:
+        - include_tasks: setup-build-dep-{{ ansible_pkg_mgr }}.yml
+
+        - name: Install Nginx build packages
+          package:
+            name: '{{ nginx_build_packages }}'
+            state: present
+
         - name: Set Nginx Server header engine
           replace:
             dest: '{{ local_source_directory }}/nginx/src/http/ngx_http_header_filter_module.c'
