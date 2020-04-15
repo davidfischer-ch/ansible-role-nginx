@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.2
+
+## Fix and enhancements
+
+- Setup dependencies only if action is setup
+
 ## v1.1.1
 
 ## Fix and enhancements
