@@ -1,14 +1,20 @@
 # Changelog
 
+## v1.1.3
+
+### Fix and enhancements
+
+- Fix nginx_daemon_enabled dynamic default value
+
 ## v1.1.2
 
-## Fix and enhancements
+### Fix and enhancements
 
 - Setup dependencies only if action is setup
 
 ## v1.1.1
 
-## Fix and enhancements
+### Fix and enhancements
 
 - Cleanup local source directory
 
