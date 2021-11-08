@@ -4,6 +4,7 @@ dependencies:
   - role: daemon
     daemon_user: '{{ nginx_daemon_user }}'
     daemon_group: '{{ nginx_daemon_group }}'
+    daemon_groups: '{{ nginx_daemon_groups }}'
     daemon_user_id: '{{ nginx_daemon_user_id }}'
     daemon_group_id: '{{ nginx_daemon_group_id }}'
     tags: [nginx, dependencies]
