@@ -18,6 +18,23 @@ nginx_dynamic_defaults:
       - git
       - libpcre3-dev
       - zlib1g-dev
+  dnf:
+    nginx_build_packages:
+      # https://developers.google.com/speed/pagespeed/module/build_ngx_pagespeed_from_source
+      - pcre
+      - pcre-devel
+      - unzip
+      - zlib
+      - zlib-devel
+    nginx_extra_packages:
+      # For GeoIP blocking feature
+      - GeoIP-data
+      - GeoIP
+    nginx_cleanup_packages:
+      - git
+      - pcre-devel
+      - zlib-devel
+
 
   yum:
     nginx_build_packages:
@@ -67,6 +84,7 @@ nginx_config_file: nginx.conf.j2
 nginx_daemon_enabled: "{{ nginx_daemon_modes[nginx_daemon_mode] == 'system' }}"
 nginx_daemon_group: www-data
 nginx_daemon_group_id: '{{ omit }}'
+nginx_daemon_groups: '{{ omit }}'
 nginx_daemon_path: /usr/share/nginx/sbin/nginx
 nginx_daemon_user: www-data
 nginx_daemon_user_id: '{{ omit }}'
