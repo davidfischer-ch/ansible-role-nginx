@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.4
+
+### Fix and enhancements
+
+- Add variable daemon_groups
+- RHEL 8 compatibility
+
 ## v1.1.3
 
 ### Fix and enhancements
