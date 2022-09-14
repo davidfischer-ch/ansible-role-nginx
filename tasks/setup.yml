@@ -161,7 +161,7 @@
         - name: Make Nginx binary executable
           file:
             name: '{{ nginx_daemon_path }}'
-            mode: 0755
+            mode: '755'
             state: file
 
         - name: Save build environment
@@ -185,7 +185,7 @@
         name: '{{ item.name }}'
         owner: '{{ item.owner|default(omit) }}'
         group: '{{ item.group|default(omit) }}'
-        mode: 0755
+        mode: '755'
         state: directory
       loop:
         - { name: '/etc/nginx/conf.d'        }
@@ -200,7 +200,7 @@
       template:
         src: '{{ item.src }}'
         dest: /etc/nginx/{{ item.dest }}
-        mode: 0644
+        mode: '644'
       loop:
         - { src: '{{ nginx_config_file }}',          dest: nginx.conf           }
         - { src: '{{ nginx_security_config_file }}', dest: conf.d/security.conf }
@@ -256,7 +256,7 @@
       template:
         src: '{{ item.value.config_file }}'
         dest: /etc/nginx/sites-enabled/{{ item.value.name }}.conf
-        mode: 0644
+        mode: '644'
       loop_control:
         label: '{{ item.value.name }}'
       notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
@@ -266,7 +266,7 @@
       template:
         src: '{{ item.value.auth_file }}'
         dest: /etc/nginx/sites-auth/{{ item.value.name }}.conf
-        mode: 0644
+        mode: '644'
       loop_control:
         label: '{{ item.value.name }}'
       notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
@@ -279,7 +279,7 @@
         state: present
         owner: '{{ nginx_daemon_user }}'
         group: '{{ nginx_daemon_group }}'
-        mode: 0440
+        mode: '440'
       loop_control:
         label: '{{ item.value.name }}'
       notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
@@ -304,7 +304,7 @@
         state: present
         owner: '{{ nginx_daemon_user }}'
         group: '{{ nginx_daemon_group }}'
-        mode: 0440
+        mode: '440'
       loop_control:
         label: '{{ item.value.name }}'
       notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
@@ -320,7 +320,7 @@
         state: present
         owner: '{{ nginx_daemon_user }}'
         group: '{{ nginx_daemon_group }}'
-        mode: 0440
+        mode: '440'
       loop_control:
         label: '{{ item.value.name }}'
       notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
@@ -333,7 +333,7 @@
         dest: /etc/nginx/sites-ssl/{{ item.0.name }}.{{ item.1 }}
         owner: '{{ nginx_daemon_user }}'
         group: '{{ nginx_daemon_group }}'
-        mode: 0440
+        mode: '440'
       loop: "{{ lookup('nested', nginx_sites.values(), ['crt', 'key']) }}"
       loop_control:
         label: '{{ item.0.name }} {{ item.1 }}'
@@ -356,7 +356,7 @@
         name: /var/log/nginx/{{ item.value.name }}
         owner: '{{ nginx_daemon_user }}'
         group: '{{ nginx_daemon_group }}'
-        mode: 0755
+        mode: '755'
         follow: no
         recurse: yes
         state: directory

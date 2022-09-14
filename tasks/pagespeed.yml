@@ -21,7 +21,7 @@
         name: '{{ nginx_pagespeed_module_cache_directory }}'
         owner: '{{ nginx_daemon_user }}'
         group: '{{ nginx_daemon_group }}'
-        mode: 0755
+        mode: '755'
         state: directory
 
     - name: Create PageSpeed source directories

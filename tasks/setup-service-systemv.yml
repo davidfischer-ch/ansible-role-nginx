@@ -4,7 +4,7 @@
   template:
     src: init.d.j2
     dest: /etc/init.d/nginx
-    mode: 0755
+    mode: '755'
   become: '{{ do_become }}'
   notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} restart nginx'
   tags: [nginx, config]  # FIXME Remove when this is fixed https://github.com/ansible/ansible/issues/30882
