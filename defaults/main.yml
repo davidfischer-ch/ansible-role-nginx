@@ -35,7 +35,6 @@ nginx_dynamic_defaults:
       - pcre-devel
       - zlib-devel
 
-
   yum:
     nginx_build_packages:
       # https://developers.google.com/speed/pagespeed/module/build_ngx_pagespeed_from_source
