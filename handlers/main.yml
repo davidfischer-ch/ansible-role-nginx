@@ -1,42 +1,42 @@
 ---
 
 - name: reload systemd
-  command:
+  ansible.builtin.command:
     systemctl daemon-reload
   become: '{{ do_become }}'
 
 - name: container restart nginx
-  command:
+  ansible.builtin.command:
     ls /dev/null
   changed_when: no
   check_mode: no
 
 - name: container reload nginx
-  command:
+  ansible.builtin.command:
     ls /dev/null
   changed_when: no
   check_mode: no
 
 - name: supervisor restart nginx
-  supervisorctl:
+  ansible.builtin.supervisorctl:
     name: nginx
     state: restarted
   become: '{{ do_become }}'
 
 - name: supervisor reload nginx
-  command:
+  ansible.builtin.command:
     supervisorctl signal HUP nginx
   become: '{{ do_become }}'
 
 - name: system restart nginx
-  service:
+  ansible.builtin.service:
     name: nginx
     state: restarted
     use: '{{ nginx_daemon_mode }}'
   become: '{{ do_become }}'
 
 - name: system reload nginx
-  service:
+  ansible.builtin.service:
     name: nginx
     state: reloaded
     use: '{{ nginx_daemon_mode }}'

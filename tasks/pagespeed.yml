@@ -17,7 +17,7 @@
             sha256_checksum: '{{ nginx_pagespeed_module_library_checksum }}'
 
     - name: Create PageSpeed cache directory
-      file:
+      ansible.builtin.file:
         name: '{{ nginx_pagespeed_module_cache_directory }}'
         owner: '{{ nginx_daemon_user }}'
         group: '{{ nginx_daemon_group }}'
@@ -25,12 +25,12 @@
         state: directory
 
     - name: Create PageSpeed source directories
-      file:
+      ansible.builtin.file:
         name: '{{ local_source_directory }}/{{ nginx_pagespeed_module_name }}/psol'
         state: directory
 
     - name: Download PageSpeed module source code
-      get_url:
+      ansible.builtin.get_url:
         url: '{{ item.url }}'
         dest: '{{ local_source_directory }}/{{ item.file }}'
         force: no
@@ -38,7 +38,7 @@
       loop: '{{ nginx_pagespeed_module_items|default([]) }}'
 
     - name: Extract PageSpeed module source code
-      unarchive:
+      ansible.builtin.unarchive:
         src: '{{ local_source_directory }}/{{ item.file }}'
         dest: '{{ local_source_directory }}/{{ item.path }}'
         copy: no

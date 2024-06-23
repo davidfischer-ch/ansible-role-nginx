@@ -1,7 +1,7 @@
 ---
 
 - name: Trigger Nginx restart
-  command:
+  ansible.builtin.command:
     ls /dev/null
   changed_when: yes
   check_mode: no

@@ -2,17 +2,17 @@
 
 - block:
     - name: Install Nginx clone packages
-      package:
+      ansible.builtin.package:
         name: '{{ nginx_clone_packages }}'
         state: present
 
     - name: Install Nginx extra packages
-      package:
+      ansible.builtin.package:
         name: '{{ nginx_extra_packages }}'
         state: present
 
     - name: Install Nginx Python packages for Ansible
-      pip:
+      ansible.builtin.pip:
         name: cryptography
         executable: '{{ nginx_pip_path }}'
         state: "{{ (nginx_cryptography_version == 'latest')|ternary('latest', omit) }}"
@@ -28,7 +28,7 @@
 
 - block:
     - name: Clone Nginx source code
-      git:
+      ansible.builtin.git:
         repo: https://github.com/nginx/nginx.git
         dest: '{{ local_source_directory }}/nginx'
         force: yes
@@ -37,7 +37,7 @@
       register: _nginx_git
 
     - name: Clone Length Hiding Filter module source code
-      git:
+      ansible.builtin.git:
         repo: https://github.com/nulab/nginx-length-hiding-filter-module.git
         dest: '{{ local_source_directory }}/nginx-length-hiding-filter-module'
         force: yes
@@ -48,7 +48,7 @@
 
     - block:
         - name: Clone Upload module source code
-          git:
+          ansible.builtin.git:
             repo: https://github.com/vkholodkov/nginx-upload-module.git
             dest: '{{ local_source_directory }}/nginx-upload-module'
             force: yes
@@ -57,7 +57,7 @@
           register: _nginx_upload_module_git
 
         - name: Clone Upload Progress module source code
-          git:
+          ansible.builtin.git:
             repo: https://github.com/masterzen/nginx-upload-progress-module.git
             dest: '{{ local_source_directory }}/nginx-upload-progress-module'
             force: yes
@@ -67,7 +67,7 @@
       when: nginx_upload_module_enabled|bool
 
     - name: Clone Zip module source code
-      git:
+      ansible.builtin.git:
         repo: https://github.com/evanmiller/mod_zip.git
         dest: '{{ local_source_directory }}/nginx-zip-module'
         force: yes
@@ -77,7 +77,7 @@
       when: nginx_zip_module_enabled|bool
 
     - name: Set Nginx build configuration
-      set_fact:
+      ansible.builtin.set_fact:
         nginx_build_cfg: >
           --prefix=/usr/share/nginx
           --conf-path=/etc/nginx/nginx.conf
@@ -104,7 +104,7 @@
           {{ nginx_pagespeed_module_configure }}
 
     - name: Set Nginx build environment
-      set_fact:
+      ansible.builtin.set_fact:
         nginx_build_env: >
           {{ nginx_build_cfg }}
           {{ _nginx_git.after }}
@@ -115,7 +115,7 @@
           {{ _nginx_zip_module_git.after|default('') }}
 
     - name: Detect if Nginx must be reinstalled
-      command:
+      ansible.builtin.command:
         cat '{{ local_source_directory }}/nginx.build.cfg'
       changed_when: >
         nginx_build_env|trim != nginx_build.stdout|default('')|trim
@@ -127,12 +127,12 @@
         - include_tasks: setup-build-dep-{{ ansible_pkg_mgr }}.yml
 
         - name: Install Nginx build packages
-          package:
+          ansible.builtin.package:
             name: '{{ nginx_build_packages }}'
             state: present
 
         - name: Set Nginx Server header engine
-          replace:
+          ansible.builtin.replace:
             dest: '{{ local_source_directory }}/nginx/src/http/ngx_http_header_filter_module.c'
             replace: '{{ item }}[] = "Server: {{ nginx_server_header_engine }}" CRLF;'
             regexp: '{{ item }}\[\] = "Server: [^;]+;$'
@@ -142,35 +142,35 @@
             - ngx_http_server_build_string
 
         - name: Configure Nginx build process
-          command:
+          ansible.builtin.command:
             ./auto/configure {{ nginx_build_cfg }}
           args:
             chdir: '{{ local_source_directory }}/nginx'
 
         - name: Build Nginx from source
-          make:
+          ansible.builtin.make:
             chdir: '{{ local_source_directory }}/nginx'
             params:
               '--jobs': '{{ ansible_processor_cores }}'
 
         - name: Install Nginx from source
-          make:
+          ansible.builtin.make:
             chdir: '{{ local_source_directory }}/nginx'
             target: install
 
         - name: Make Nginx binary executable
-          file:
+          ansible.builtin.file:
             name: '{{ nginx_daemon_path }}'
             mode: '755'
             state: file
 
         - name: Save build environment
-          copy:
+          ansible.builtin.copy:
             content: '{{ nginx_build_env }}'
             dest: '{{ local_source_directory }}/nginx.build.cfg'
 
         - name: Trigger Nginx restart
-          command:
+          ansible.builtin.command:
             ls /dev/null
           changed_when: yes
           check_mode: no
@@ -181,7 +181,7 @@
 
 - block:
     - name: Create Nginx directories
-      file:
+      ansible.builtin.file:
         name: '{{ item.name }}'
         owner: '{{ item.owner|default(omit) }}'
         group: '{{ item.group|default(omit) }}'
@@ -197,7 +197,7 @@
         - { name: '/var/log/nginx', owner: '{{ nginx_daemon_user }}', group: '{{ nginx_daemon_group }}' }
 
     - name: Configure Nginx
-      template:
+      ansible.builtin.template:
         src: '{{ item.src }}'
         dest: /etc/nginx/{{ item.dest }}
         mode: '644'
@@ -207,7 +207,7 @@
       notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
 
     - name: Remove default site
-      file:
+      ansible.builtin.file:
         path: /etc/nginx/sites-enabled/default
         state: absent
       notify: '{{ nginx_daemon_modes[nginx_daemon_mode] }} reload nginx'
@@ -218,14 +218,14 @@
 
 - block:
     - name: Start Nginx service
-      supervisorctl:
+      ansible.builtin.supervisorctl:
         name: nginx
         state: started
       ignore_errors: yes
       register: _nginx_start
 
     - name: Restart Nginx service
-      supervisorctl:
+      ansible.builtin.supervisorctl:
         name: nginx
         state: restarted
       when: _nginx_start is failure
@@ -234,7 +234,7 @@
   when: nginx_daemon_mode == 'supervisor'
 
 - name: Start Nginx service
-  service:
+  ansible.builtin.service:
     name: nginx
     enabled: yes
     state: started
@@ -243,7 +243,7 @@
   when: nginx_daemon_modes[nginx_daemon_mode] == 'system'
 
 - name: Trigger Nginx reload
-  command:
+  ansible.builtin.command:
     ls /dev/null
   changed_when: yes
   check_mode: no
@@ -253,7 +253,7 @@
 
 - block:
     - name: Setup the Nginx sites
-      template:
+      ansible.builtin.template:
         src: '{{ item.value.config_file }}'
         dest: /etc/nginx/sites-enabled/{{ item.value.name }}.conf
         mode: '644'
@@ -263,7 +263,7 @@
       with_dict: '{{ nginx_sites }}'
 
     - name: Setup the Nginx sites basic authentication
-      template:
+      ansible.builtin.template:
         src: '{{ item.value.auth_file }}'
         dest: /etc/nginx/sites-auth/{{ item.value.name }}.conf
         mode: '644'
@@ -274,7 +274,7 @@
       with_dict: '{{ nginx_sites }}'
 
     - name: Generate the Nginx self signed certificates (private key)
-      openssl_privatekey:
+      ansible.builtin.openssl_privatekey:
         path: /etc/nginx/sites-ssl/{{ item.value.name }}.key
         state: present
         owner: '{{ nginx_daemon_user }}'
@@ -287,7 +287,7 @@
       with_dict: '{{ nginx_sites }}'
 
     - name: Generate the Nginx self signed certificates (request)
-      openssl_csr:
+      ansible.builtin.openssl_csr:
         path: /etc/nginx/sites-ssl/{{ item.value.name }}.csr
         privatekey_path: /etc/nginx/sites-ssl/{{ item.value.name }}.key
         common_name: '{{ item.value.ssl_auto_signed.common_name|default(item.value.domains[0]) }}'
@@ -312,7 +312,7 @@
       with_dict: '{{ nginx_sites }}'
 
     - name: Generate the Nginx self signed certificates (certificate)
-      openssl_certificate:
+      ansible.builtin.openssl_certificate:
         path: /etc/nginx/sites-ssl/{{ item.value.name }}.crt
         csr_path: /etc/nginx/sites-ssl/{{ item.value.name }}.csr
         privatekey_path: /etc/nginx/sites-ssl/{{ item.value.name }}.key
@@ -328,7 +328,7 @@
       with_dict: '{{ nginx_sites }}'
 
     - name: Setup the Nginx sites certificates
-      copy:
+      ansible.builtin.copy:
         src: '{{ item.0.ssl_files_prefix }}.{{ item.1 }}'
         dest: /etc/nginx/sites-ssl/{{ item.0.name }}.{{ item.1 }}
         owner: '{{ nginx_daemon_user }}'
@@ -341,7 +341,7 @@
       when: item.0.ssl_files_prefix|default('')|length > 0
 
     - name: Setup the Nginx sites Diffie-Hellman parameters
-      command:
+      ansible.builtin.command:
         openssl dhparam -out /etc/nginx/sites-dhparam/{{ item.value.name }}.pem 2048
       args:
         creates: /etc/nginx/sites-dhparam/{{ item.value.name }}.pem
@@ -352,7 +352,7 @@
       with_dict: '{{ nginx_sites }}'
 
     - name: Create the Nginx sites logs directory
-      file:
+      ansible.builtin.file:
         name: /var/log/nginx/{{ item.value.name }}
         owner: '{{ nginx_daemon_user }}'
         group: '{{ nginx_daemon_group }}'
@@ -365,7 +365,7 @@
       with_dict: '{{ nginx_sites }}'
 
     - name: Check Nginx config
-      command: >
+      ansible.builtin.command: >
         {{ nginx_daemon_path }} -t
       changed_when: no
       check_mode: no

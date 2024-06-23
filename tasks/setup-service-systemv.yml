@@ -1,7 +1,7 @@
 ---
 
 - name: Configure Nginx service
-  template:
+  ansible.builtin.template:
     src: init.d.j2
     dest: /etc/init.d/nginx
     mode: '755'

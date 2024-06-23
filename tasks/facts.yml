@@ -6,7 +6,7 @@
         defaults: '{{ nginx_dynamic_defaults }}'
         must_match: yes
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - nginx_daemon_mode in nginx_daemon_modes
           - nginx_role_action in nginx_role_actions

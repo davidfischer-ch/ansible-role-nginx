@@ -1,7 +1,7 @@
 ---
 
 - name: Install Nginx build dependencies
-  apt:
+  ansible.builtin.apt:
     name: nginx
     state: build-dep
   become: '{{ do_become }}'

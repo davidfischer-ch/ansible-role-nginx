@@ -4,19 +4,19 @@
 
 - block:
     - name: Cleanup Nginx packages
-      package:
+      ansible.builtin.package:
         name: '{{ nginx_cleanup_packages }}'
         state: absent
 
     - name: Cleanup Nginx Python packages
-      pip:
+      ansible.builtin.pip:
         name: cryptography
         executable: '{{ nginx_pip_path }}'
         state: absent
       environment: '{{ nginx_pip_environment }}'
 
     - name: Cleanup source directory
-      file:
+      ansible.builtin.file:
         path: '{{ local_source_directory }}'
         state: absent
   become: '{{ do_become }}'
